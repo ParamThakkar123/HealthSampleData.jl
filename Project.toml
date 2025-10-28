@@ -1,6 +1,6 @@
 name = "HealthSampleData"
 uuid = "85295614-c7c2-47eb-9e31-7664d7fbe6db"
-authors = ["TheCedarPrince <jacobszelko@gmail.com> and contributors"]
+authors = ["TheCedarPrince <jacobszelko@gmail.com>, ParamThakkar123 <paramthakkar864@gmail.com> and contributors"]
 version = "0.0.1"
 
 [deps]
