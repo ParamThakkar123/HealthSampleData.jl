@@ -1,6 +1,6 @@
 name = "HealthSampleData"
-uuid = "b8464e9a-ae38-46a4-977b-86f00930f698"
-authors = ["Jacob Zelko <jacobszelko@gmail.com>"]
+uuid = "85295614-c7c2-47eb-9e31-7664d7fbe6db"
+authors = ["TheCedarPrince <jacobszelko@gmail.com>, ParamThakkar123 <paramthakkar864@gmail.com> and contributors"]
 version = "0.0.1"
 
 [deps]
@@ -8,4 +8,10 @@ DataDeps = "124859b0-ceae-595e-8997-d05f6a7a8dfe"
 
 [compat]
 DataDeps = "0.7"
-julia = "1"
+julia = "1.10"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
