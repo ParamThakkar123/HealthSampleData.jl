@@ -16,12 +16,6 @@ makedocs(;
     ),
     pages=[
         "Home" => "index.md",
-        "Quickstart" => "quickstart.md",
-
-        "Pre-Cohort Analysis" => "precohort.md",
-        "Post-Cohort Analysis" => "postcohort.md",
-        
-        "API" => "api.md",
     ],
     doctest = false,
 )
