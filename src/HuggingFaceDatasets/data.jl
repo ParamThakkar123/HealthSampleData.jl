@@ -4,7 +4,8 @@ function Synthea()
         "Synthea",
         "1 million patients each with 3 year retrospective medical histories generated using the Synthea data generator (https://synthea.mitre.org). DuckDB database following the OMOP Common Data Model layout.",
         "https://huggingface.co/datasets/JuliaHealthOrg/JuliaHealthDatasets/blob/main/synthea_1M_3YR.duckdb"; 
-        fetch_method = p -> localpath
+        # fetch_method gets called as (remotepath, localdir) by DataDeps
+        fetch_method = (remotepath, localdir) -> localpath
     ))
 
     datadep"Synthea"
@@ -26,10 +27,10 @@ function Test()
         Archipelago (Antarctica) penguin data. R package version 0.1.0.
         https://allisonhorst.github.io/palmerpenguins/. doi:
         10.5281/zenodo.3960218.
-        
+
         """,
-        "https://huggingface.co/datasets/JuliaHealthOrg/JuliaHealthDatasets/blob/main/penguins.csv"; 
-        fetch_method = p -> localpath
+        "https://huggingface.co/datasets/JuliaHealthOrg/JuliaHealthDatasets/penguins.csv"; 
+        fetch_method = (remotepath, localdir) -> localpath
     ))
 
     datadep"Test"
