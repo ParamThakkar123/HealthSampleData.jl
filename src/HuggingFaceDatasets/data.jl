@@ -1,21 +1,60 @@
-using HealthSampleData
-
-"""
-    register_huggingface_dataset(name::String, repo::String, filename::String)
-
-Registers a dataset from HuggingFace as a DataDep and returns the local path.
-"""
-function register_huggingface_dataset(name::String, repo::String, filename::String)
-    localpath = HealthSampleData._huggingface_dataset_register(name, repo, filename)
-
+function Synthea()
+    localpath = HealthSampleData._huggingface_dataset_register("Synthea", "JuliaHealthOrg/JuliaHealthDatasets", "synthea_1M_3YR.duckdb")
     register(DataDep(
-        name,
-        "Dataset from Hugging Face repository $(repo).",
-        "https://huggingface.co/datasets/$(repo)/resolve/main/$(filename)"; 
+        "Synthea",
+        "1 million patients each with 3 year retrospective medical histories generated using the Synthea data generator (https://synthea.mitre.org). DuckDB database following the OMOP Common Data Model layout.",
+        "https://huggingface.co/datasets/JuliaHealthOrg/JuliaHealthDatasets/blob/main/synthea_1M_3YR.duckdb"; 
         fetch_method = p -> localpath
     ))
 
-    return localpath
+    datadep"Synthea"
+
+	@info "Synthea data source is downloaded!"
+
+	return datadep"Synthea/synthea_1M_3YR.duckdb"
 end
 
-export register_huggingface_dataset
+
+function Test()
+    localpath = HealthSampleData._huggingface_dataset_register("Test", "JuliaHealthOrg/JuliaHealthDatasets", "penguins.csv")
+    register(DataDep(
+        "Test",
+        """
+        The Palmer Penguins test dataset for HealthSampleData.jl. To cite:
+
+        Horst AM, Hill AP, Gorman KB (2020). palmerpenguins: Palmer
+        Archipelago (Antarctica) penguin data. R package version 0.1.0.
+        https://allisonhorst.github.io/palmerpenguins/. doi:
+        10.5281/zenodo.3960218.
+        
+        """,
+        "https://huggingface.co/datasets/JuliaHealthOrg/JuliaHealthDatasets/blob/main/penguins.csv"; 
+        fetch_method = p -> localpath
+    ))
+
+    datadep"Test"
+
+    @info "Test data source is downloaded!"
+
+    return datadep"Test/test_data.duckdb"
+end
+
+"""
+    register_huggingface_dataset(name::String)
+
+Registers a dataset from HuggingFace as a DataDep and returns the local path.
+"""
+function download_hf_dataset(name::String)
+    if name == "Synthea"
+        @info "Downloading Synthea dataset as DataDep..."
+        return Synthea()
+    elseif 
+        name == "Test"
+        @info "Downloading Test dataset as DataDep..."
+        return Test()
+    else
+        error("Dataset registration for $name is not implemented.")
+    end
+end
+
+export download_hf_dataset
