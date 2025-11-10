@@ -48,8 +48,7 @@ function download_hf_dataset(name::String)
     if name == "Synthea"
         @info "Downloading Synthea dataset as DataDep..."
         return Synthea()
-    elseif 
-        name == "Test"
+    elseif name == "Test"
         @info "Downloading Test dataset as DataDep..."
         return Test()
     else
