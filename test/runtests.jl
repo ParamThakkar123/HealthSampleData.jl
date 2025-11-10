@@ -13,3 +13,12 @@ using Test
         @test HealthSampleData.progress_callback(512 * 1024^2, 0, last_pct) === nothing  # Unknown total size
     end
 end
+
+@testset "HuggingFaceDatasets - Test dataset" begin
+    @test isa(HealthSampleData.Test, Function)
+    @test hasmethod(HealthSampleData.Test, Tuple{}) 
+
+    @test isa(HealthSampleData.download_hf_dataset, Function)
+
+    @test_throws ErrorException HealthSampleData.download_hf_dataset("NonExistentDataset12345")
+end
