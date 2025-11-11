@@ -17,12 +17,7 @@ function _huggingface_dataset_register(name::String, repo::String, filename::Str
     @info "Resolving Hugging Face metadata for $repo"
 
     # Try fetching dataset info safely
-    dataset = try
-        HF.info(HF.Dataset, repo)
-    catch e
-        @warn "Failed to resolve dataset metadata: $e. Falling back to direct download."
-        nothing
-    end
+    dataset = HF.info(HF.Dataset, repo)
 
     # Set up progress callback
     last_pct = Ref(-1)
