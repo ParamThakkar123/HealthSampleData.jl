@@ -1,3 +1,13 @@
+# helper: ensure a stable per-user cache for immediate returns (avoids datadep interactive prompts)
+function _cache_and_return(localpath::String, name::String, filename::String)
+    cache_dir = joinpath(homedir(), ".julia", "HealthSampleData_datasets", name)
+    mkpath(cache_dir)
+    dest = joinpath(cache_dir, filename)
+    cp(localpath, dest; force=true)
+    @info "$name dataset cached at $dest"
+    return dest
+end
+
 function Synthea()
     localpath = HealthSampleData._huggingface_dataset_register("Synthea", "JuliaHealthOrg/JuliaHealthDatasets", "synthea_1M_3YR.duckdb")
     register(DataDep(
@@ -5,14 +15,17 @@ function Synthea()
         "1 million patients each with 3 year retrospective medical histories generated using the Synthea data generator (https://synthea.mitre.org). DuckDB database following the OMOP Common Data Model layout.",
         "https://huggingface.co/datasets/JuliaHealthOrg/JuliaHealthDatasets/blob/main/synthea_1M_3YR.duckdb"; 
         # fetch_method gets called as (remotepath, localdir) by DataDeps
-        fetch_method = (remotepath, localdir) -> localpath
+        fetch_method = (remotepath, localdir) -> begin
+            mkpath(localdir)
+            dest = joinpath(localdir, "synthea_1M_3YR.duckdb")
+            cp(localpath, dest; force=true)
+            return dest
+        end
     ))
 
-    datadep"Synthea"
-
-	@info "Synthea data source is downloaded!"
-
-	return datadep"Synthea/synthea_1M_3YR.duckdb"
+    # Do not call datadep"Synthea" directly (avoids interactive prompt when a stale datadep dir exists).
+    # Instead, cache the downloaded file in a per-user location and return that path immediately.
+    return _cache_and_return(localpath, "Synthea", "synthea_1M_3YR.duckdb")
 end
 
 
@@ -30,14 +43,16 @@ function Test()
 
         """,
         "https://huggingface.co/datasets/JuliaHealthOrg/JuliaHealthDatasets/penguins.csv"; 
-        fetch_method = (remotepath, localdir) -> localpath
+        fetch_method = (remotepath, localdir) -> begin
+            mkpath(localdir)
+            dest = joinpath(localdir, "penguins.csv")
+            cp(localpath, dest; force=true)
+            return dest
+        end
     ))
 
-    datadep"Test"
-
-    @info "Test data source is downloaded!"
-
-    return datadep"Test/test_data.duckdb"
+    # Avoid calling datadep"Test" here to prevent DataDeps interactive prompt on stale installs.
+    return _cache_and_return(localpath, "Test", "penguins.csv")
 end
 
 """
