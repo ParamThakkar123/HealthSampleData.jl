@@ -9,10 +9,6 @@ Resolve dataset metadata from Hugging Face, download `filename` via HuggingFaceH
 and return the local filesystem path to the downloaded file. Displays download progress when possible.
 """
 function _huggingface_dataset_register(name::String, repo::String, filename::String)
-    # Ensure full Hugging Face dataset URL
-    if !startswith(repo, "http")
-        repo = "https://huggingface.co/datasets/$(repo)"
-    end
 
     @info "Resolving Hugging Face metadata for $repo"
 
