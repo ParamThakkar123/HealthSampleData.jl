@@ -51,5 +51,3 @@ function _huggingface_dataset_register(name::String, repo::String, filename::Str
         end
     end
 end
-
-export _huggingface_dataset_register
