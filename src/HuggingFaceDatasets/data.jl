@@ -4,12 +4,8 @@ function Synthea()
         "Synthea",
         "1 million patients each with 3 year retrospective medical histories generated using the Synthea data generator (https://synthea.mitre.org). DuckDB database following the OMOP Common Data Model layout.",
         "https://huggingface.co/datasets/JuliaHealthOrg/JuliaHealthDatasets/blob/main/synthea_1M_3YR.duckdb"; 
-        # fetch_method gets called as (remotepath, localdir) by DataDeps
         fetch_method = (remotepath, localdir) -> begin
-            mkpath(localdir)
-            dest = joinpath(localdir, "synthea_1M_3YR.duckdb")
-            cp(localpath, dest; force=true)
-            return dest
+            return localpath
         end
     ))
 
@@ -36,10 +32,7 @@ function Test()
         """,
         "https://huggingface.co/datasets/JuliaHealthOrg/JuliaHealthDatasets/penguins.csv"; 
         fetch_method = (remotepath, localdir) -> begin
-            mkpath(localdir)
-            dest = joinpath(localdir, "penguins.csv")
-            cp(localpath, dest; force=true)
-            return dest
+            return localpath
         end
     ))
 
